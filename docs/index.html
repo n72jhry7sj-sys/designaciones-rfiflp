@@ -13,7 +13,7 @@ function add(parent,tag,value){const n=document.createElement(tag);n.textContent
 async function init(){
   try{
     const s=await get("./data/status.json");
-    $("state").textContent=s.state==="ok"?"Datos procesados correctamente":s.state==="error"?"Error de actualización":"Pendiente de primera comprobación";
+    $("state").textContent=s.state==="ok"?"PDF de designaciones actualizado":s.state==="seeded"?"683 partidos importados · automatización pendiente de verificar":s.state==="error"?"No se pudo actualizar el PDF (se muestran los últimos datos disponibles)":"Pendiente de primera comprobación";
     $("detail").textContent=(s.checked_at?"Comprobado: "+new Date(s.checked_at).toLocaleString("es-ES"):"Todavía no ejecutado")+(s.game_count?" · "+s.game_count+" partidos":"")+(s.error?" · "+s.error:"");
     const h=await get("./data/history.json");$("history").replaceChildren();
     if(!h.length)$("history").textContent="Sin versiones procesadas";
