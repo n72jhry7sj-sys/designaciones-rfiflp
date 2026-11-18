@@ -1,10 +1,10 @@
 import re
 import fitz
 
-DATE = re.compile(r"^\\d{2}-\\d{2}-\\d{4}$")
-TIME = re.compile(r"^\\d{1,2}:\\d{2}$")
-ROLE = re.compile(r"^(Árbitr[oa]|2º Árbitro|A\\. Asistente [12]|AA\\. Cronometrador|Oficial Informador|Delegado Informador|Cronometrador)\\s*:\\s*(.*)$", re.I)
-COMP = re.compile(r"^Competición:\\s*(.+)$", re.I)
+DATE = re.compile(r"^\d{2}-\d{2}-\d{4}$")
+TIME = re.compile(r"^\d{1,2}:\d{2}$")
+ROLE = re.compile(r"^(Árbitr[oa]|2º Árbitro|A\. Asistente [12]|AA\. Cronometrador|Oficial Informador|Delegado Informador|Cronometrador)\s*:\s*(.*)$", re.I)
+COMP = re.compile(r"^Competición:\s*(.+)$", re.I)
 
 def parse(data):
     doc = fitz.open(stream=data, filetype="pdf")
