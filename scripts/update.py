@@ -9,7 +9,7 @@ out = Path(__file__).resolve().parents[1] / "docs" / "data"
 out.mkdir(parents=True, exist_ok=True)
 manual_pdf = Path(__file__).resolve().parents[1] / "docs" / "source" / "latest.pdf"
 DOC_ID = "1059902"
-DOWNLOAD_URL = "https://www.rfiflp.com/pnfg/NBdd_DesDocumento?cod_primaria=3002150&cod_documento=" + DOC_ID + "&descargar=1"
+DOWNLOAD_URL = "https://www.rfiflp.com/pnfg/NBdd_DesDocumento?cod_primaria=142&cod_documento=" + DOC_ID + "&descargar=1"
 
 def now(): return datetime.now(timezone.utc).isoformat(timespec="seconds")
 def read(p, default):
