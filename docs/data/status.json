@@ -1,6 +1,6 @@
 {
-  "state": "seeded",
-  "checked_at": null,
+  "state": "ok",
+  "checked_at": "2026-11-18T22:23:06+00:00",
   "interval_minutes": 30,
   "error": null,
   "updated_at": "2026-11-18",
