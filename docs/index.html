@@ -1,8 +1,8 @@
 <!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Designaciones arbitrales · RFIFLP</title>
-<style>body{margin:0;background:#f2f6f7;color:#193d49;font:16px system-ui}header{background:linear-gradient(110deg,#103f53,#087e83);padding:40px max(20px,calc((100% - 960px)/2));color:white}h1{font-size:clamp(28px,5vw,42px);margin:6px 0}.wrap{max-width:960px;margin:25px auto;padding:0 16px}section{background:white;border-radius:16px;padding:25px;margin-bottom:16px;box-shadow:0 2px 15px #1231}h2{font-size:20px}input{padding:13px;border:1px solid #bbced2;border-radius:8px;font:inherit;min-width:200px;flex:1}button{background:#087e83;color:white;border:0;border-radius:8px;padding:13px 24px;font:inherit;cursor:pointer}.row{display:flex;gap:10px;flex-wrap:wrap}.muted{color:#5c7781;font-size:14px}.hit{border-top:1px solid #dae6e9;padding:15px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 system-ui}a{color:#087e83}</style></head>
+<style>body{margin:0;background:#f2f6f7;color:#193d49;font:16px system-ui}header{background:linear-gradient(110deg,#103f53,#087e83);padding:40px max(20px,calc((100% - 960px)/2));color:white}h1{font-size:clamp(28px,5vw,42px);margin:6px 0}.wrap{max-width:960px;margin:25px auto;padding:0 16px}section{background:white;border-radius:16px;padding:25px;margin-bottom:16px;box-shadow:0 2px 15px #1231}h2{font-size:20px}select,input{padding:13px;border:1px solid #bbced2;border-radius:8px;font:inherit;min-width:200px;flex:1}button{background:#087e83;color:white;border:0;border-radius:8px;padding:13px 24px;font:inherit;cursor:pointer}.row{display:flex;gap:10px;flex-wrap:wrap}.muted{color:#5c7781;font-size:14px}.hit{border-top:1px solid #dae6e9;padding:15px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 system-ui}a{color:#087e83}</style></head>
 <body><header><small>RFIFLP · CONSULTA DE DESIGNACIONES</small><h1>Designaciones arbitrales</h1><p>Nacionales y Autonómicos FCF / Territoriales RFIFLP</p></header>
 <main class="wrap"><section><h2>Actualización</h2><p id="state">Consultando estado…</p><p id="detail" class="muted"></p><a href="https://www.rfiflp.com/pnfg/NBdd_LstDocumentos?cod_primaria=3002150&amp;cod_secundaria=3002153">Fuente oficial</a></section>
-<section><h2>Buscar árbitro, equipo o competición</h2><div class="row"><input id="query" placeholder="Nombre o competición" aria-label="Buscar"><button id="search">Buscar</button></div><p class="muted">Búsqueda textual en el PDF. La clasificación por jornadas aún está pendiente de validar el documento.</p></section>
+<section><h2>Buscar árbitro, equipo o competición</h2><div class="row"><select id="competition" aria-label="Competición"><option value="">Todas las competiciones</option></select><input id="query" placeholder="Nombre o competición" aria-label="Buscar"><button id="search">Buscar</button></div><p class="muted">Filtra por competición o busca cualquier árbitro, asistente, informador o equipo.</p></section>
 <section><h2>Resultados <span id="count" class="muted"></span></h2><div id="results" class="muted">Introduce una búsqueda.</div></section>
 <section><h2>Histórico de versiones</h2><div id="history" class="muted">Sin versiones.</div></section>
 <p class="muted">Web independiente. Confirma siempre las designaciones con la RFIFLP. La comprobación programada cada 30 minutos no garantiza exactitud.</p></main>
@@ -10,7 +10,41 @@
 let data=null;const $=id=>document.getElementById(id);
 async function get(path){const r=await fetch(path+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw Error("HTTP "+r.status);return r.json()}
 function add(parent,tag,value){const n=document.createElement(tag);n.textContent=value;parent.append(n);return n}
-async function init(){try{const s=await get("./data/status.json");$("state").textContent=s.state==="ok"?"Última comprobación correcta":s.state==="error"?"Error al obtener el PDF":"Pendiente de primera comprobación";$("detail").textContent=(s.checked_at?"Comprobado: "+new Date(s.checked_at).toLocaleString("es-ES"):"Todavía no ejecutado")+(s.error?" · "+s.error:"");const h=await get("./data/history.json");$("history").replaceChildren();if(!h.length){$("history").textContent="Sin versiones procesadas"}for(const v of h)add($("history"),"p",new Date(v.indexed_at).toLocaleString("es-ES")+" · "+v.pages+" páginas · "+v.sha256.slice(0,10));try{data=await get("./data/index.json")}catch(e){$("results").textContent="Todavía no hay PDF descargado."}}catch(e){$("state").textContent="No se pudo cargar el estado."}}
-function search(){const q=$("query").value.trim().toLocaleLowerCase("es"),r=$("results");r.replaceChildren();if(!q){r.textContent="Escribe el nombre del árbitro, equipo o competición.";return}if(!data){r.textContent="Aún no hay PDF indexado.";return}let hits=[];for(const p of data.pages){const lines=p.text.split(/\r?\n/);for(let i=0;i<lines.length;i++)if(lines[i].toLocaleLowerCase("es").includes(q))hits.push({page:p.page,text:lines.slice(Math.max(0,i-3),i+5).join("\n")})}$("count").textContent="("+hits.length+")";if(!hits.length){r.textContent="Sin coincidencias.";return}for(const h of hits.slice(0,100)){const div=add(r,"div","");div.className="hit";add(div,"strong","Página "+h.page);add(div,"pre",h.text);const a=add(div,"a","Abrir PDF oficial");a.href=data.source_url;a.target="_blank";a.rel="noopener"}}
-$("search").onclick=search;$("query").onkeydown=e=>{if(e.key==="Enter")search()};init();
+async function init(){
+  try{
+    const s=await get("./data/status.json");
+    $("state").textContent=s.state==="ok"?"Datos procesados correctamente":s.state==="error"?"Error de actualización":"Pendiente de primera comprobación";
+    $("detail").textContent=(s.checked_at?"Comprobado: "+new Date(s.checked_at).toLocaleString("es-ES"):"Todavía no ejecutado")+(s.game_count?" · "+s.game_count+" partidos":"")+(s.error?" · "+s.error:"");
+    const h=await get("./data/history.json");$("history").replaceChildren();
+    if(!h.length)$("history").textContent="Sin versiones procesadas";
+    for(const v of h)add($("history"),"p",new Date(v.indexed_at).toLocaleString("es-ES")+" · "+v.pages+" páginas · "+v.sha256.slice(0,10));
+    try{
+      data=await get("./data/index.json");
+      if(data.competitions)for(const name of data.competitions){const opt=document.createElement("option");opt.value=name;opt.textContent=name;$("competition").append(opt)}
+      search();
+    }catch(e){$("results").textContent="Todavía no hay PDF de designaciones indexado."}
+  }catch(e){$("state").textContent="No se pudo cargar el estado."}
+}
+function search(){
+  const q=$("query").value.trim().toLocaleLowerCase("es"),comp=$("competition").value,r=$("results");
+  r.replaceChildren();$("count").textContent="";
+  if(!data?.games){r.textContent="Todavía no hay datos de designaciones.";return}
+  const hits=data.games.filter(g=>(!comp||g.competition===comp)&&(!q||[g.competition,g.home,g.away,g.date,g.time,...Object.values(g.officials||{})].join(" ").toLocaleLowerCase("es").includes(q)));
+  $("count").textContent="("+hits.length+" partidos)";
+  if(!hits.length){r.textContent="Sin coincidencias.";return}
+  for(const g of hits.slice(0,150)){
+    const block=add(r,"article","");block.className="hit";
+    add(block,"strong",g.home+" — "+g.away);
+    add(block,"p",g.competition+" · "+g.date+" · "+g.time+" · Página "+g.page);
+    const list=add(block,"div","");
+    if(Object.keys(g.officials||{}).length){for(const [role,name] of Object.entries(g.officials))add(list,"div",role+": "+name)}
+    else add(list,"div","Sin árbitros indicados en este PDF.");
+    if(data.source_url?.startsWith("http")){const link=add(block,"a","Documento oficial");link.href=data.source_url;link.target="_blank";link.rel="noopener"}
+  }
+  if(hits.length>150)add(r,"p","Mostrando los primeros 150 partidos. Acota la búsqueda.");
+}
+$("search").onclick=search;
+$("competition").onchange=search;
+$("query").onkeydown=e=>{if(e.key==="Enter")search()};
+init();
 </script></body></html>
