@@ -1,0 +1,24 @@
+{
+  "source": "Designaciones.pdf",
+  "issued": "2026-11-18",
+  "range_start": "2026-07-01",
+  "range_end": "2026-11-17",
+  "parts": [
+    "./data/history/history_01.json",
+    "./data/history/history_02.json",
+    "./data/history/history_03.json",
+    "./data/history/history_04.json",
+    "./data/history/history_05.json",
+    "./data/history/history_06.json",
+    "./data/history/history_07.json",
+    "./data/history/history_08.json",
+    "./data/history/history_09.json",
+    "./data/history/history_10.json",
+    "./data/history/history_11.json",
+    "./data/history/history_12.json",
+    "./data/history/history_13.json",
+    "./data/history/history_14.json",
+    "./data/history/history_15.json",
+    "./data/history/history_16.json"
+  ]
+}
