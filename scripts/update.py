@@ -50,7 +50,7 @@ def main():
             history = read(history_file, [])
             history.insert(0, {"sha256":digest,"indexed_at":now(),"pages":parsed["pages"]})
             save(history_file, history[:100])
-            status.update({"sha256":digest,"updated_at":now(),"page_count":len(pages)})
+            status.update({"sha256":digest,"updated_at":now(),"page_count":parsed["pages"], "game_count":len(parsed["games"]), "competition_count":len(parsed["competitions"])})
         status.update({"state":"ok","error":None})
     except Exception as exc:
         status.update({"state":"error","error":str(exc)})
