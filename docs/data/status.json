@@ -1,6 +1,12 @@
 {
-  "state": "error",
-  "checked_at": "2026-11-18T21:18:44+00:00",
+  "state": "seeded",
+  "checked_at": null,
   "interval_minutes": 30,
-  "error": "El PDF recibido no parece contener designaciones arbitrales; se descarta."
+  "error": null,
+  "updated_at": "2026-11-18",
+  "page_count": 72,
+  "game_count": 683,
+  "competition_count": 53,
+  "sha256": "4ee1dc310df4347e269019a587fdad31d6af4f20317bb7bfb7743b92f6721d12",
+  "note": "Datos iniciales importados del PDF facilitado. Descarga automática aún no validada."
 }
