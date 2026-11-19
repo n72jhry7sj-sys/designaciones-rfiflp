@@ -28,6 +28,18 @@ footer{border-top:1px solid #dae5df;padding:20px 0 5px;font-size:12px;color:#758
 .hidden{display:none!important}
 @media(max-width:800px){.filters{grid-template-columns:1fr 1fr}.filters .field:first-child{grid-column:1/-1}}
 @media(max-width:520px){.mast-inner{padding:13px 16px;gap:12px}.logo{width:108px;height:71px}.mast-copy small{font-size:10px}.mast-copy strong{font-size:20px}.mast-copy span{font-size:11px}.banner-inner{padding:24px 16px 28px}main{padding:0 12px}.panel{padding:17px}.filters{grid-template-columns:1fr}.filters .field:first-child{grid-column:auto}.card-list{grid-template-columns:1fr}.source{white-space:normal}.tabs{gap:7px}.tab{font-size:13px;padding:10px 13px}}
+
+.stats-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0}
+.stats-card{padding:15px 10px;background:#f2f7f3;border:1px solid #dbe9e1;border-radius:12px}
+.stats-card strong{display:block;font-size:26px;line-height:1.1;font-variant-numeric:tabular-nums;color:var(--navy)}
+.stats-card span{display:block;font-size:12px;color:var(--muted);margin-top:7px;font-weight:650}
+.stats-table-wrap{overflow-x:auto}.stats-table{width:100%;border-collapse:collapse;font-size:13px}
+.stats-table th,.stats-table td{padding:11px 9px;text-align:left;border-bottom:1px solid var(--border)}
+.stats-table th{font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:#5c7777;background:#f4f8f4}
+.stats-table td.num,.stats-table th.num{text-align:right;font-variant-numeric:tabular-nums}
+.stats-table tbody tr:hover{background:#f9fbf9}
+.stats-warning{font-size:12px;color:var(--muted);line-height:1.6;margin-top:12px}
+@media(max-width:600px){.stats-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.stats-card strong{font-size:23px}.stats-table th,.stats-table td{padding:10px 6px}}
 </style></head><body>
 <div class="masthead"><div class="mast-inner">
 <img class="logo" src="https://graffica.ams3.digitaloceanspaces.com/2025/11/Imagotipo_FIFLP1-1024x576.png" alt="Logotipo de la Federación Interinsular de Fútbol de Las Palmas">
@@ -45,6 +57,11 @@ footer{border-top:1px solid #dae5df;padding:20px 0 5px;font-size:12px;color:#758
 <div class="field"><label for="query">Buscar árbitro o equipo</label><input id="query" type="search" placeholder="Nombre, apellidos, club o código" autocomplete="off"></div>
 <div class="field"><label for="date">Fecha exacta</label><input id="date" type="date"></div>
 </div></section>
+<section class="panel hidden" id="refStats" aria-live="polite">
+<div class="statline"><div><h2>Estadísticas del árbitro</h2><p class="intro" id="statsSubtitle">Designaciones registradas anteriores al día de hoy.</p></div></div>
+<div class="field hidden" id="refSelectorWrap"><label for="refSelector">Seleccionar árbitro</label><select id="refSelector"></select></div>
+<div id="refStatsContent"></div>
+</section>
 <section class="panel"><div class="statline"><h2 id="resultsTitle">Partidos próximos</h2><span id="count" class="count" aria-live="polite"></span></div><p id="loading" class="history-note"></p><div class="card-list" id="results" aria-live="polite"></div><button class="more hidden" id="more" type="button">Ver más partidos</button></section>
 <section class="panel"><div class="status"><div class="status-icon">↻</div><div><strong id="state">Consultando origen de datos…</strong><p id="detail"></p></div><a class="source" href="https://www.rfiflp.com/pnfg/NBdd_LstDocumentos?cod_primaria=3002150&amp;cod_secundaria=3002153" target="_blank" rel="noopener">Fuente RFIFLP ↗</a></div></section>
 <footer>Consulta independiente basada en designaciones publicadas por la RFIFLP. Ante cambios o discrepancias, prevalece el documento oficial. La descarga automática continúa pendiente de validación.</footer>
@@ -109,7 +126,101 @@ function render(reset=true){
  $("more").classList.toggle("hidden",shown>=found.length);
  $("count").textContent=found.length+" "+(found.length===1?"partido":"partidos");
  if(!found.length){result.replaceChildren();add(result,"p",mode==="history"&&historyLoading?"Cargando historial…":mode==="upcoming"?"No se han encontrado designaciones desde hoy con estos filtros.":"No se han encontrado partidos anteriores con estos filtros.","empty")}
+ renderStats();
 }
+
+let selectedRef="",statsHistoryWarn="";
+function roleType(role){
+ const name=norm(role);
+ if(name.includes("informador")||name.includes("observador"))return"informador";
+ if(name.includes("asistente")||name.includes("cronometrador")||name.includes("2 arbitro")||name.includes("segundo arbitro"))return"asistente";
+ if(name.includes("arbitro")||name.includes("arbitra"))return"principal";
+ return"other";
+}
+function availablePeople(){
+ const counts=new Map();
+ for(const game of [...history,...latest]){
+   for(const p of officialList(game)){
+     const key=norm(p.name);if(!key)continue;
+     const item=counts.get(key)||{name:p.name,n:0};
+     item.n++;counts.set(key,item);
+   }
+ }
+ return [...counts.values()].sort((a,b)=>a.name.localeCompare(b.name,"es"));
+}
+function statGames(){
+ // El histórico incluye partidos hasta el 17/11; el PDF semanal del 12 al 18.
+ // Priorizar los registros del histórico para evitar contabilizar dos veces un encuentro.
+ const historicIds=new Set(history.map(g=>g.id).filter(Boolean));
+ const signature=g=>[iso(g.date),norm(g.competition),norm(g.home).replace(/[^a-z0-9]/g,"").slice(0,20)].join("|");
+ const signatures=new Set(history.map(signature));
+ const result=[...history];
+ for(const game of latest){
+   if(iso(game.date)>=today)continue;
+   if(historicIds.has(game.id))continue;
+   if(signatures.has(signature(game)))continue;
+   // El histórico es la fuente preferente para las fechas que abarca.
+   if(iso(game.date)<"2026-11-18"&&historyLoaded)continue;
+   result.push(game);
+ }
+ return result.filter(g=>iso(g.date)<today);
+}
+function statsFor(refName){
+ const ref=norm(refName),byCategory=new Map(),seen=new Set(),roles={principal:0,asistente:0,informador:0,other:0};
+ for(const game of statGames()){
+   const matches=officialList(game).filter(p=>norm(p.name)===ref);
+   if(!matches.length)continue;
+   const key=game.id?"id:"+game.id:[iso(game.date),norm(game.competition),norm(game.home),norm(game.away)].join("|");
+   if(seen.has(key))continue;seen.add(key);
+   let types=new Set(matches.map(p=>roleType(p.role)));
+   // Solo se cuenta una designación por papel en cada encuentro.
+   for(const type of types)roles[type]++;
+   const cat=game.competition||"Competición no identificada";
+   const count=byCategory.get(cat)||{competition:cat,principal:0,asistente:0,informador:0,other:0,total:0};
+   for(const type of types)count[type]++;
+   count.total++;byCategory.set(cat,count);
+ }
+ return {roles,categories:[...byCategory.values()].sort((a,b)=>b.total-a.total||a.competition.localeCompare(b.competition,"es")),total:seen.size};
+}
+function renderStats(){
+ const panel=$("refStats"),content=$("refStatsContent"),picker=$("refSelector"),wrap=$("refSelectorWrap"),q=norm($("query").value.trim());
+ content.replaceChildren();
+ if(q.length<3){panel.classList.add("hidden");selectedRef="";return}
+ const matches=availablePeople().filter(p=>norm(p.name).includes(q));
+ if(!matches.length){panel.classList.add("hidden");selectedRef="";return}
+ panel.classList.remove("hidden");
+ if(matches.length>1){
+   wrap.classList.remove("hidden");
+   picker.replaceChildren();
+   add(picker,"option","Selecciona un árbitro").value="";
+   for(const p of matches){const option=add(picker,"option",p.name);option.value=p.name}
+   if(matches.some(p=>norm(p.name)===norm(selectedRef)))picker.value=selectedRef;
+   else{const exact=matches.find(p=>norm(p.name)===q);selectedRef=exact?.name||"";picker.value=selectedRef}
+   if(!selectedRef){add(content,"p","Hay "+matches.length+" nombres coincidentes. Selecciona uno para consultar sus estadísticas.","stats-warning");return}
+ }else{
+   wrap.classList.add("hidden");selectedRef=matches[0].name;
+ }
+ if(!historyLoaded){
+   add(content,"p","Cargando el histórico para calcular las estadísticas completas…","stats-warning");
+   return;
+ }
+ const data=statsFor(selectedRef);
+ $("statsSubtitle").textContent=selectedRef+" · designaciones registradas antes de hoy";
+ const tiles=add(content,"div",undefined,"stats-summary");
+ for(const [label,value] of [["Total",data.total],["Árbitro principal",data.roles.principal],["Asistente",data.roles.asistente],["Informador",data.roles.informador]]){
+   const tile=add(tiles,"div",undefined,"stats-card");add(tile,"strong",String(value));add(tile,"span",label);
+ }
+ add(content,"h3","Partidos por competición");
+ const wrapTable=add(content,"div",undefined,"stats-table-wrap");
+ const table=add(wrapTable,"table",undefined,"stats-table");
+ const thead=add(table,"thead");const header=add(thead,"tr");
+ for(const h of ["Competición","Principal","Asistente","Informador","Total"]){const th=add(header,"th",h);if(h!=="Competición")th.className="num"}
+ const tbody=add(table,"tbody");
+ if(!data.categories.length){const row=add(tbody,"tr");const td=add(row,"td","No constan designaciones anteriores para este árbitro.");td.colSpan=5}
+ for(const category of data.categories){const row=add(tbody,"tr");add(row,"td",category.competition);for(const key of ["principal","asistente","informador","total"])add(row,"td",String(category[key]),"num")}
+ add(content,"p","Estadísticas basadas en los PDF disponibles (temporada 2026/27); son designaciones, no una certificación de partidos efectivamente dirigidos. No se cuentan encuentros futuros. Las funciones de segundo árbitro y cronometrador se agrupan en «Asistente». "+(data.roles.other?"Otras funciones no clasificadas: "+data.roles.other+". ":"")+(statsHistoryWarn||""),"stats-warning");
+}
+
 async function loadHistory(){
  if(historyLoaded||historyLoading)return;
  historyLoading=true;$("loading").textContent="Cargando el histórico de designaciones…";render();
@@ -119,9 +230,9 @@ async function loadHistory(){
  let errors=0;history=[];
  for(const r of results){if(r.status==="fulfilled")history.push(...r.value.records);else errors++}
  const seen=new Set();history=history.filter(g=>{const key=g.id||[g.date,g.competition,g.home].join("|");if(seen.has(key))return false;seen.add(key);return true});
- historyLoaded=true;setOptions(onlyUnique(history.map(g=>g.competition)));
+ historyLoaded=true;statsHistoryWarn=errors?"El histórico está incompleto: no se cargaron "+errors+" bloques.":"";setOptions(onlyUnique(history.map(g=>g.competition)));
  $("loading").textContent=errors?errors+" bloques de histórico no se pudieron cargar.":"";render();
- }catch(e){$("loading").textContent="No se pudo cargar el histórico. Actualiza la página para reintentarlo."}
+ }catch(e){$("loading").textContent="No se pudo cargar el histórico. Actualiza la página para reintentarlo.";statsHistoryWarn="No se pudo cargar todo el histórico."}
  finally{historyLoading=false}
 }
 function switchTab(next){
@@ -136,7 +247,8 @@ function switchTab(next){
 $("upcomingTab").addEventListener("click",()=>switchTab("upcoming"));
 $("historyTab").addEventListener("click",()=>switchTab("history"));
 $("competition").addEventListener("change",()=>render());
-$("query").addEventListener("input",()=>render());
+$("query").addEventListener("input",()=>{render();if(norm($("query").value).length>=3&&!historyLoaded&&!historyLoading)loadHistory()});
+$("refSelector").addEventListener("change",e=>{selectedRef=e.target.value;renderStats()});
 $("date").addEventListener("change",()=>render());
 $("more").addEventListener("click",()=>render(false));
 (async()=>{try{
