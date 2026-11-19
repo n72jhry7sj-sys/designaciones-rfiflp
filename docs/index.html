@@ -69,7 +69,7 @@ footer{border-top:1px solid #dae5df;padding:20px 0 5px;font-size:12px;color:#758
 <script>
 "use strict";
 const $=id=>document.getElementById(id);
-let latest=[],history=[],historyLoaded=false,historyLoading=false,mode="upcoming",found=[],shown=0;
+let latest=[],history=[],historyLoaded=false,historyLoading=false,mode="upcoming",found=[],shown=0,competitionOrder=[];
 const PAGE_SIZE=72,now=new Date(),today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,"0"),String(now.getDate()).padStart(2,"0")].join("-");
 const iso=s=>{if(!s)return"";const parts=s.split("-");return parts.length===3?parts[2]+"-"+parts[1]+"-"+parts[0]:""};
 const nice=s=>{if(!s)return"";const [day,month,year]=s.split("-");return day+"/"+month+"/"+year};
@@ -180,7 +180,13 @@ function statsFor(refName){
    for(const type of types)count[type]++;
    count.total++;byCategory.set(cat,count);
  }
- return {roles,categories:[...byCategory.values()].sort((a,b)=>b.total-a.total||a.competition.localeCompare(b.competition,"es")),total:seen.size};
+ return {roles,categories:[...byCategory.values()].sort((a,b)=>{
+ const ai=competitionOrder.indexOf(a.competition),bi=competitionOrder.indexOf(b.competition);
+ if(ai>=0&&bi>=0)return ai-bi;
+ if(ai>=0)return -1;
+ if(bi>=0)return 1;
+ return a.competition.localeCompare(b.competition,"es");
+}),total:seen.size};
 }
 function renderStats(){
  const panel=$("refStats"),content=$("refStatsContent"),picker=$("refSelector"),wrap=$("refSelectorWrap"),q=norm($("query").value.trim());
@@ -230,7 +236,7 @@ async function loadHistory(){
  let errors=0;history=[];
  for(const r of results){if(r.status==="fulfilled")history.push(...r.value.records);else errors++}
  const seen=new Set();history=history.filter(g=>{const key=g.id||[g.date,g.competition,g.home].join("|");if(seen.has(key))return false;seen.add(key);return true});
- historyLoaded=true;statsHistoryWarn=errors?"El histórico está incompleto: no se cargaron "+errors+" bloques.":"";setOptions(onlyUnique(history.map(g=>g.competition)));
+ competitionOrder=onlyUnique([...competitionOrder,...history.map(g=>g.competition)]);historyLoaded=true;statsHistoryWarn=errors?"El histórico está incompleto: no se cargaron "+errors+" bloques.":"";setOptions(onlyUnique(history.map(g=>g.competition)));
  $("loading").textContent=errors?errors+" bloques de histórico no se pudieron cargar.":"";render();
  }catch(e){$("loading").textContent="No se pudo cargar el histórico. Actualiza la página para reintentarlo.";statsHistoryWarn="No se pudo cargar todo el histórico."}
  finally{historyLoading=false}
@@ -253,7 +259,7 @@ $("date").addEventListener("change",()=>render());
 $("more").addEventListener("click",()=>render(false));
 (async()=>{try{
  const [index,status]=await Promise.all([fetchJSON("./data/index.json"),fetchJSON("./data/status.json")]);
- latest=index.games||[];setOptions(index.competitions||[]);render();
+ latest=index.games||[];competitionOrder=index.competitions||onlyUnique(latest.map(g=>g.competition));setOptions(competitionOrder);render();
  const state=status.state==="ok"?"Fuente automática comprobada":status.state==="seeded"?"Consulta disponible · pendiente la descarga automática":status.state==="error"?"Último PDF cargado · fallo en la descarga automática":"PDF cargado";
  $("state").textContent=state;
  $("detail").textContent="Documento principal: "+latest.length+" partidos · "+(status.checked_at?"Última revisión: "+new Date(status.checked_at).toLocaleString("es-ES"):"Carga inicial del 12/11/2026")+(status.error?" · "+status.error:"");
