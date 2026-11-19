@@ -20,6 +20,8 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r requirements.txt
+      - name: Comprobar sintaxis del lector
+        run: python -m py_compile scripts/sync_actas.py
       - name: Leer y contrastar fichas públicas
         run: python scripts/sync_actas.py
         env:
