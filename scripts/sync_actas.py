@@ -69,22 +69,28 @@ def inspect(html, match):
     if not any(x in text for x in date_variants):
         return None, "Fecha del acta no coincide: " + expected
 
-    # Recoger los iconos que visualmente identifican tarjetas. El HTML no siempre
-    # incluye el color: en ese caso el recuento NO se da por verificado.
+    # Exigir fila de tarjeta con minuto; no contabilizar iconos de leyenda.
     explicit = {"yellow": 0, "red": 0}
     ambiguous = []
     for img in soup.find_all("img"):
-        name = " ".join(str(img.get(x, "")) for x in ("alt", "title", "src")).lower()
-        if re.search(r"tarjet|amarill|yellow|roj[ao]|card", name):
-            color = card_color(img)
-            if color:
-                explicit[color] += 1
-            else:
-                ambiguous.append(name[:130])
+        row = img.find_parent(["tr", "li"])
+        if not row:
+            continue
+        row_text = row.get_text(" ", strip=True)
+        if not re.search(r"\(\s*\d{1,3}\s*['’]\s*\)", row_text):
+            continue
+        heading = row.find_previous(re.compile(r"^h[1-6]$"))
+        if heading is None or "tarjetas" not in heading.get_text(" ", strip=True).lower():
+            continue
+        color = card_color(img)
+        if color:
+            explicit[color] += 1
+        else:
+            ambiguous.append(str(img)[:130])
     if ambiguous:
-        return None, "Hay iconos de tarjeta sin color identificable"
+        return None, "Hay iconos en filas de tarjetas cuyo color no se pudo clasificar"
     if not any(explicit.values()):
-        return None, "No se pudo confirmar el color de las tarjetas (o ausencia de ellas)"
+        return None, "No hay tarjetas de color verificable: no inferir cero desde el HTML"
 
     return {
         "validated": True,
