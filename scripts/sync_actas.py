@@ -9,6 +9,9 @@ import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+from io import BytesIO
+from urllib.parse import urljoin
+from PIL import Image
 
 import requests
 from bs4 import BeautifulSoup
@@ -56,7 +59,51 @@ def card_color(image):
     return None
 
 
-def inspect(html, match):
+
+def image_color(img, session, page_url, cache):
+    """Identifica tarjetas por la proporción de píxeles cromáticos.
+    No da por buena una imagen si no predomina claramente amarillo o rojo.
+    """
+    source = img.get("src") or img.get("data-src") or ""
+    if not source or source.startswith("data:"):
+        return None
+    uri = urljoin(page_url, source)
+    if uri not in cache:
+        try:
+            response = session.get(uri, timeout=10)
+            response.raise_for_status()
+            if len(response.content) > 100_000:
+                cache[uri] = None
+            else:
+                picture = Image.open(BytesIO(response.content)).convert("RGBA")
+                picture.thumbnail((150, 150))
+                reds = yellows = chromatic = 0
+                for r, g, b, a in picture.getdata():
+                    if a < 80:
+                        continue
+                    peak, trough = max(r, g, b), min(r, g, b)
+                    if peak - trough < 55 or peak < 100:
+                        continue
+                    chromatic += 1
+                    if r > 145 and r > g * 1.35 and r > b * 1.35:
+                        reds += 1
+                    if r > 140 and g > 115 and b < min(r, g) * 0.65 and abs(r-g) < 110:
+                        yellows += 1
+                if chromatic < 5:
+                    cache[uri] = None
+                elif reds >= max(5, 2*yellows) and reds / chromatic > 0.65:
+                    cache[uri] = "red"
+                elif yellows >= max(5, 2*reds) and yellows / chromatic > 0.65:
+                    cache[uri] = "yellow"
+                else:
+                    cache[uri] = None
+        except Exception:
+            cache[uri] = None
+    return cache[uri]
+
+
+def inspect(html, match, session, page_url, cache):
+
     soup = BeautifulSoup(html, "html.parser")
     text = soup.get_text(" ", strip=True)
     if "Ficha de Partido" not in text or "Tarjetas" not in text:
@@ -82,11 +129,11 @@ def inspect(html, match):
         heading = row.find_previous(re.compile(r"^h[1-6]$"))
         if heading is None or "tarjetas" not in heading.get_text(" ", strip=True).lower():
             continue
-        color = card_color(img)
+        color = card_color(img) or image_color(img, session, page_url, cache)
         if color:
             explicit[color] += 1
         else:
-            ambiguous.append(str(img)[:130])
+            ambiguous.append({"src":str(img.get("src",""))[:140],"class":img.get("class",[]),"style":str(img.get("style",""))[:140]})
     if ambiguous:
         return None, "Hay iconos en filas de tarjetas cuyo color no se pudo clasificar"
     if not any(explicit.values()):
@@ -112,6 +159,7 @@ def main():
     sample_errors = []
     session = requests.Session()
     session.headers.update(HEADERS)
+    image_cache = {}
     for offset in range(min(BATCH, len(games))):
         code, match = games[(initial + offset) % len(games)]
         if reports.get(code, {}).get("validated") is True:
@@ -120,13 +168,19 @@ def main():
         try:
             response = session.get(BASE, params={"CodActa": code, "cod_primaria": "1000120"}, timeout=15)
             response.raise_for_status()
-            parsed, error = inspect(response.text, match)
+            parsed, error = inspect(response.text, match, session, response.url, image_cache)
             if parsed:
                 reports[code] = {**reports.get(code, {}), **parsed, "official_url": response.url,
                                  "date": match["date"], "verified_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
                 verified += 1
             elif len(sample_errors) < 5:
-                sample_errors.append({"code": code, "reason": error})
+                sample_errors.append({"code": code, "reason": error,
+                                      "card_icon_examples": [
+                                          {"src": i.get("src","")[:120], "alt": i.get("alt","")[:50],
+                                           "class": i.get("class",[]), "style": i.get("style","")[:100]}
+                                          for i in BeautifulSoup(response.text,"html.parser").find_all("img")
+                                          if any(w in str(i).lower() for w in ("tarjet","yellow","red","amarill","roj"))
+                                      ][:5]})
         except requests.RequestException as exc:
             failures += 1
             if len(sample_errors) < 5:
