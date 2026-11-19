@@ -184,9 +184,21 @@ function statsFor(refName){
    // Solo se cuenta una designación por papel en cada encuentro.
    for(const type of types)roles[type]++;
    const cat=game.competition||"Competición no identificada";
-   const count=byCategory.get(cat)||{competition:cat,principal:0,asistente:0,informador:0,other:0,total:0};
+   const count=byCategory.get(cat)||{competition:cat,principal:0,asistente:0,informador:0,total:0,amarillas:0,rojas:0,tarjetasPartidos:0};
    for(const type of types)count[type]++;
-   count.total++;byCategory.set(cat,count);
+   count.total++;
+   // Solo el árbitro principal: no atribuir sanciones al asistente ni al informador.
+   if(types.has("principal")&&game.code){
+     const report=matchReports[String(game.code)];
+     // Un cero es válido ÚNICAMENTE si el acta contiene totales numéricos verificados.
+     const yellow=report?.yellow_cards_count,red=report?.red_cards_count;
+     if(report?.validated===true&&Number.isInteger(yellow)&&yellow>=0&&Number.isInteger(red)&&red>=0){
+       count.amarillas+=yellow;
+       count.rojas+=red;
+       count.tarjetasPartidos++;
+     }
+   }
+   byCategory.set(cat,count);
  }
  return {roles,categories:[...byCategory.values()].sort((a,b)=>{
  const ai=competitionOrder.indexOf(a.competition),bi=competitionOrder.indexOf(b.competition);
@@ -228,11 +240,17 @@ function renderStats(){
  const wrapTable=add(content,"div",undefined,"stats-table-wrap");
  const table=add(wrapTable,"table",undefined,"stats-table");
  const thead=add(table,"thead");const header=add(thead,"tr");
- for(const h of ["Competición","Principal","Asistente","Informador","Total"]){const th=add(header,"th",h);if(h!=="Competición")th.className="num"}
+ for(const h of ["Competición","Principal","Asistente","Informador","Total","Amarillas","Rojas","Tarjetas"]){const th=add(header,"th",h);if(h!=="Competición")th.className="num"}
  const tbody=add(table,"tbody");
- if(!data.categories.length){const row=add(tbody,"tr");const td=add(row,"td","No constan designaciones anteriores para este árbitro.");td.colSpan=5}
- for(const category of data.categories){const row=add(tbody,"tr");add(row,"td",category.competition);for(const key of ["principal","asistente","informador","total"])add(row,"td",String(category[key]),"num")}
- add(content,"p","Estadísticas basadas en los PDF disponibles (temporada 2026/27); son designaciones, no una certificación de partidos efectivamente dirigidos. No se cuentan encuentros futuros. Las funciones de segundo árbitro y cronometrador se agrupan en «Asistente». "+(data.roles.other?"Otras funciones no clasificadas: "+data.roles.other+". ":"")+(statsHistoryWarn||""),"stats-warning");
+ if(!data.categories.length){const row=add(tbody,"tr");const td=add(row,"td","No constan designaciones anteriores para este árbitro.");td.colSpan=8}
+ for(const category of data.categories){
+   const row=add(tbody,"tr");add(row,"td",category.competition);
+   for(const key of ["principal","asistente","informador","total"])add(row,"td",String(category[key]),"num");
+   const validated=category.tarjetasPartidos>0;
+   for(const value of [category.amarillas,category.rojas,category.amarillas+category.rojas])
+     add(row,"td",validated?String(value):"Sin datos","num");
+ }
+ add(content,"p","Tarjetas: solo actas verificadas de partidos dirigidos como árbitro principal. «Sin datos» significa que todavía no hay actas con recuento de tarjetas validado; las cifras de una competición pueden ser parciales. Estadísticas basadas en los PDF disponibles (temporada 2026/27); son designaciones, no una certificación de partidos efectivamente dirigidos. No se cuentan encuentros futuros. Las funciones de segundo árbitro y cronometrador se agrupan en «Asistente». "+(data.roles.other?"Otras funciones no clasificadas: "+data.roles.other+". ":"")+(statsHistoryWarn||""),"stats-warning");
 }
 
 async function loadHistory(){
