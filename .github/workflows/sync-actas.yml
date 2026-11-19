@@ -1,0 +1,36 @@
+name: Revisar tarjetas de actas
+on:
+  schedule:
+    - cron: '19,49 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: importacion-actas
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+      - name: Leer y contrastar fichas públicas
+        run: python scripts/sync_actas.py
+        env:
+          ACTA_BATCH: '40'
+      - name: Guardar actas verificadas y progreso
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/match_reports.json docs/data/match_reports_progress.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Revisar actas RFIFLP y registrar tarjetas verificadas"
+            git pull --rebase
+            git push
+          fi
