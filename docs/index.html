@@ -240,13 +240,14 @@ function renderStats(){
  const wrapTable=add(content,"div",undefined,"stats-table-wrap");
  const table=add(wrapTable,"table",undefined,"stats-table");
  const thead=add(table,"thead");const header=add(thead,"tr");
- for(const h of ["Competición","Principal","Asistente","Informador","Total","Amarillas","Rojas","Tarjetas"]){const th=add(header,"th",h);if(h!=="Competición")th.className="num"}
+ for(const h of ["Competición","Principal","Asistente","Informador","Total","Actas con tarjetas verificadas","Amarillas","Rojas","Tarjetas"]){const th=add(header,"th",h);if(h!=="Competición")th.className="num"}
  const tbody=add(table,"tbody");
- if(!data.categories.length){const row=add(tbody,"tr");const td=add(row,"td","No constan designaciones anteriores para este árbitro.");td.colSpan=8}
+ if(!data.categories.length){const row=add(tbody,"tr");const td=add(row,"td","No constan designaciones anteriores para este árbitro.");td.colSpan=9}
  for(const category of data.categories){
    const row=add(tbody,"tr");add(row,"td",category.competition);
    for(const key of ["principal","asistente","informador","total"])add(row,"td",String(category[key]),"num");
    const validated=category.tarjetasPartidos>0;
+   add(row,"td",String(category.tarjetasPartidos)+" / "+String(category.principal),"num");
    for(const value of [category.amarillas,category.rojas,category.amarillas+category.rojas])
      add(row,"td",validated?String(value):"Sin datos","num");
  }
