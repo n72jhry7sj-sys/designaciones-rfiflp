@@ -1,12 +1,12 @@
 {
   "state": "ok",
-  "checked_at": "2026-11-19T18:23:01+00:00",
+  "checked_at": "2026-11-19T19:34:53+00:00",
   "interval_minutes": 30,
   "error": null,
-  "updated_at": "2026-11-18",
-  "page_count": 72,
-  "game_count": 683,
-  "competition_count": 53,
-  "sha256": "4ee1dc310df4347e269019a587fdad31d6af4f20317bb7bfb7743b92f6721d12",
+  "updated_at": "2026-11-19T19:34:55+00:00",
+  "page_count": 68,
+  "game_count": 632,
+  "competition_count": 54,
+  "sha256": "3bc15a1aa45eee54f68d29ad14e8e79e8deed5a5b932dfbbe5104e779ba9ac91",
   "note": "Datos iniciales importados del PDF facilitado. Descarga automática aún no validada."
 }
