@@ -63,7 +63,7 @@ footer{border-top:1px solid #dae5df;padding:20px 0 5px;font-size:12px;color:#758
 <div id="refStatsContent"></div>
 </section>
 <section class="panel"><div class="statline"><h2 id="resultsTitle">Partidos próximos</h2><span id="count" class="count" aria-live="polite"></span></div><p id="loading" class="history-note"></p><div class="card-list" id="results" aria-live="polite"></div><button class="more hidden" id="more" type="button">Ver más partidos</button></section>
-<section class="panel"><div class="status"><div class="status-icon">↻</div><div><strong id="state">Consultando origen de datos…</strong><p id="detail"></p></div><a class="source" href="https://www.rfiflp.com/pnfg/NBdd_LstDocumentos?cod_primaria=3002150&amp;cod_secundaria=3002153" target="_blank" rel="noopener">Fuente RFIFLP ↗</a></div></section>
+<section class="panel"><p class="history-note" id="cardSyncStatus">Tarjetas: pendiente de verificación de las actas oficiales.</p><div class="status"><div class="status-icon">↻</div><div><strong id="state">Consultando origen de datos…</strong><p id="detail"></p></div><a class="source" href="https://www.rfiflp.com/pnfg/NBdd_LstDocumentos?cod_primaria=3002150&amp;cod_secundaria=3002153" target="_blank" rel="noopener">Fuente RFIFLP ↗</a></div></section>
 <footer>Consulta independiente basada en designaciones publicadas por la RFIFLP. Ante cambios o discrepancias, prevalece el documento oficial. La descarga automática continúa pendiente de validación.</footer>
 </main>
 <script>
@@ -287,6 +287,10 @@ $("more").addEventListener("click",()=>render(false));
  const [index,status]=await Promise.all([fetchJSON("./data/index.json"),fetchJSON("./data/status.json")]);
  latest=index.games||[];competitionOrder=index.competitions||onlyUnique(latest.map(g=>g.competition));
  try{matchReports=await fetchJSON("./data/match_reports.json")}catch(_){matchReports={}}
+ try{
+   const progress=await fetchJSON("./data/match_reports_progress.json");
+   $("cardSyncStatus").textContent="Revisión de tarjetas: "+progress.verified_total+" actas con datos verificados de "+progress.total_unique_games+" partidos del histórico. Última comprobación: "+new Date(progress.last_checked_at).toLocaleString("es-ES")+". Las demás quedan como «Sin datos».";
+ }catch(_){$("cardSyncStatus").textContent="Tarjetas: el sistema de revisión de actas está preparado, pero todavía no hay una primera comprobación automática completada."}
  setOptions(competitionOrder);render();
  const state=status.state==="ok"?"Fuente automática comprobada":status.state==="seeded"?"Consulta disponible · pendiente la descarga automática":status.state==="error"?"Último PDF cargado · fallo en la descarga automática":"PDF cargado";
  $("state").textContent=state;
