@@ -120,6 +120,16 @@ def inspect(html, match, session, page_url, cache):
     explicit = {"yellow": 0, "red": 0}
     ambiguous = []
     for img in soup.find_all("img"):
+        source_hint = " ".join(str(img.get(attr, "")) for attr in ("src","alt","title","class")).lower()
+        if not re.search(r"tarjet|amarill|yellow|roj[ao]|red.?card", source_hint):
+            # Admitir iconos genéricos pequeños (la web puede no etiquetar el color).
+            width = str(img.get("width","")).replace("px","")
+            height = str(img.get("height","")).replace("px","")
+            try:
+                if not (0 < int(width) <= 48 and 0 < int(height) <= 48):
+                    continue
+            except ValueError:
+                continue
         row = img.find_parent(["tr", "li"])
         if not row:
             continue
@@ -157,6 +167,7 @@ def main():
     initial = int(progress.get("cursor", 0)) % len(games)
     processed = verified = failures = 0
     sample_errors = []
+    diagnostic = []
     session = requests.Session()
     session.headers.update(HEADERS)
     image_cache = {}
@@ -174,6 +185,18 @@ def main():
                                  "date": match["date"], "verified_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
                 verified += 1
             elif len(sample_errors) < 5:
+                card_nodes = BeautifulSoup(response.text, "html.parser")
+                minute_rows = []
+                for row in card_nodes.find_all(["tr","li"]):
+                    if re.search(r"\(\s*\d{1,3}\s*['’]\s*\)", row.get_text(" ",strip=True)) and row.find("img"):
+                        for img in row.find_all("img")[:4]:
+                            minute_rows.append({"src":str(img.get("src",""))[:140],
+                                                "alt":str(img.get("alt",""))[:80],
+                                                "width":img.get("width"),"height":img.get("height"),
+                                                "class":img.get("class",[]),
+                                                "row_text":row.get_text(" ",strip=True)[:120]})
+                if len(diagnostic)<3 and minute_rows:
+                    diagnostic.append({"code":code,"minute_rows":minute_rows[:15]})
                 sample_errors.append({"code": code, "reason": error,
                                       "card_icon_examples": [
                                           {"src": i.get("src","")[:120], "alt": i.get("alt","")[:50],
@@ -191,7 +214,8 @@ def main():
                 "verified_this_run": verified, "network_errors": failures,
                 "verified_total": sum(r.get("validated") is True for r in reports.values()),
                 "last_checked_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                "samples": sample_errors}
+                "samples": sample_errors,
+                "image_diagnostics": diagnostic}
     save(REPORTS, reports)
     save(PROGRESS, progress)
     print(json.dumps(progress, ensure_ascii=False, indent=2))
