@@ -7,5 +7,23 @@
     "source": "Vídeo de ficha pública RFIFLP aportado por el usuario",
     "verified": "2026-11-19",
     "note": "Resultado verificado visualmente. Goles y tarjetas pendientes de indexación automatizada."
+  },
+  "279401": {
+    "validated": true,
+    "yellow_cards_count": 4,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=279401&cod_primaria=1000120",
+    "date": "14-11-2026",
+    "verified_at": "2026-11-19T16:17:12+00:00"
+  },
+  "292837": {
+    "validated": true,
+    "yellow_cards_count": 2,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=292837&cod_primaria=1000120",
+    "date": "14-11-2026",
+    "verified_at": "2026-11-19T16:17:14+00:00"
   }
 }
