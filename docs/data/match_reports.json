@@ -778,5 +778,86 @@
     "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=264946&cod_primaria=1000120",
     "date": "06-11-2026",
     "verified_at": "2026-11-20T11:39:30+00:00"
+  },
+  "268130": {
+    "validated": true,
+    "yellow_cards_count": 2,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=268130&cod_primaria=1000120",
+    "date": "06-11-2026",
+    "verified_at": "2026-11-20T12:43:30+00:00"
+  },
+  "274654": {
+    "validated": true,
+    "yellow_cards_count": 6,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=274654&cod_primaria=1000120",
+    "date": "06-11-2026",
+    "verified_at": "2026-11-20T12:43:30+00:00"
+  },
+  "264337": {
+    "validated": true,
+    "yellow_cards_count": 6,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=264337&cod_primaria=1000120",
+    "date": "06-11-2026",
+    "verified_at": "2026-11-20T12:43:31+00:00"
+  },
+  "272183": {
+    "validated": true,
+    "yellow_cards_count": 5,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=272183&cod_primaria=1000120",
+    "date": "06-11-2026",
+    "verified_at": "2026-11-20T12:43:31+00:00"
+  },
+  "270984": {
+    "validated": true,
+    "yellow_cards_count": 7,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=270984&cod_primaria=1000120",
+    "date": "06-11-2026",
+    "verified_at": "2026-11-20T12:43:32+00:00"
+  },
+  "264336": {
+    "validated": true,
+    "yellow_cards_count": 6,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=264336&cod_primaria=1000120",
+    "date": "06-11-2026",
+    "verified_at": "2026-11-20T12:43:33+00:00"
+  },
+  "287272": {
+    "validated": true,
+    "yellow_cards_count": 3,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=287272&cod_primaria=1000120",
+    "date": "06-11-2026",
+    "verified_at": "2026-11-20T12:43:33+00:00"
+  },
+  "282922": {
+    "validated": true,
+    "yellow_cards_count": 3,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=282922&cod_primaria=1000120",
+    "date": "06-11-2026",
+    "verified_at": "2026-11-20T12:43:34+00:00"
+  },
+  "292829": {
+    "validated": true,
+    "yellow_cards_count": 4,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=292829&cod_primaria=1000120",
+    "date": "06-11-2026",
+    "verified_at": "2026-11-20T12:43:35+00:00"
   }
 }
