@@ -1,34 +1,33 @@
 {
-  "cursor": 1080,
+  "cursor": 1120,
   "total_unique_games": 4309,
   "checked_this_run": 40,
-  "verified_this_run": 9,
-  "network_errors": 0,
-  "verified_total": 104,
-  "last_checked_at": "2026-11-20T15:10:49+00:00",
+  "verified_this_run": 2,
+  "network_errors": 1,
+  "verified_total": 106,
+  "last_checked_at": "2026-11-20T16:11:30+00:00",
   "samples": [
     {
-      "code": "277870",
+      "code": "289059",
       "reason": "Sin ficha completa o sección Tarjetas",
       "card_icon_examples": []
     },
     {
-      "code": "293230",
+      "code": "285389",
       "reason": "Sin ficha completa o sección Tarjetas",
       "card_icon_examples": []
     },
     {
-      "code": "292123",
+      "code": "286849",
       "reason": "Sin ficha completa o sección Tarjetas",
       "card_icon_examples": []
     },
     {
-      "code": "281261",
-      "reason": "Sin ficha completa o sección Tarjetas",
-      "card_icon_examples": []
+      "code": "292083",
+      "reason": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))"
     },
     {
-      "code": "292959",
+      "code": "283927",
       "reason": "Sin ficha completa o sección Tarjetas",
       "card_icon_examples": []
     }
