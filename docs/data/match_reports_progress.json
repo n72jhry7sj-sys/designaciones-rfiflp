@@ -1,34 +1,34 @@
 {
-  "cursor": 1960,
+  "cursor": 2000,
   "total_unique_games": 4309,
   "checked_this_run": 40,
-  "verified_this_run": 2,
+  "verified_this_run": 4,
   "network_errors": 0,
-  "verified_total": 185,
-  "last_checked_at": "2026-11-21T14:12:20+00:00",
+  "verified_total": 189,
+  "last_checked_at": "2026-11-21T15:01:44+00:00",
   "samples": [
     {
-      "code": "291411",
+      "code": "292934",
       "reason": "Sin ficha completa o sección Tarjetas",
       "card_icon_examples": []
     },
     {
-      "code": "289294",
+      "code": "288267",
       "reason": "Sin ficha completa o sección Tarjetas",
       "card_icon_examples": []
     },
     {
-      "code": "289354",
+      "code": "289039",
       "reason": "Sin ficha completa o sección Tarjetas",
       "card_icon_examples": []
     },
     {
-      "code": "288237",
+      "code": "289566",
       "reason": "Sin ficha completa o sección Tarjetas",
       "card_icon_examples": []
     },
     {
-      "code": "288283",
+      "code": "287588",
       "reason": "Sin ficha completa o sección Tarjetas",
       "card_icon_examples": []
     }
