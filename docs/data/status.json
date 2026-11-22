@@ -1,8 +1,8 @@
 {
   "state": "error",
-  "checked_at": "2026-11-22T11:15:25+00:00",
+  "checked_at": "2026-11-22T12:14:33+00:00",
   "interval_minutes": 30,
-  "error": "El enlace de descarga del documento 1059902 no devolvió un PDF.",
+  "error": "HTTPSConnectionPool(host='www.rfiflp.com', port=443): Max retries exceeded with url: /pnfg/NBdd_DesDocumento?cod_primaria=142&cod_documento=1059902&descargar=1 (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.rfiflp.com', port=443) at 0x74bf312f1bb0>, 'Connection to www.rfiflp.com timed out. (connect timeout=40)'))",
   "updated_at": "2026-11-19T19:34:55+00:00",
   "page_count": 68,
   "game_count": 632,
