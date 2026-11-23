@@ -1,6 +1,6 @@
 {
   "state": "error",
-  "checked_at": "2026-11-23T22:50:34+00:00",
+  "checked_at": "2026-11-23T23:48:25+00:00",
   "interval_minutes": 30,
   "error": "El enlace de descarga del documento 1059902 no devolvió un PDF.",
   "updated_at": "2026-11-19T19:34:55+00:00",
