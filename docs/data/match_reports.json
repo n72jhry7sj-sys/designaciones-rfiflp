@@ -4162,5 +4162,104 @@
     "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=272129&cod_primaria=1000120",
     "date": "23-09-2026",
     "verified_at": "2026-11-23T21:34:41+00:00"
+  },
+  "263266": {
+    "validated": true,
+    "yellow_cards_count": 4,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=263266&cod_primaria=1000120",
+    "date": "19-09-2026",
+    "verified_at": "2026-11-23T22:35:31+00:00"
+  },
+  "269125": {
+    "validated": true,
+    "yellow_cards_count": 6,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=269125&cod_primaria=1000120",
+    "date": "19-09-2026",
+    "verified_at": "2026-11-23T22:35:32+00:00"
+  },
+  "277828": {
+    "validated": true,
+    "yellow_cards_count": 4,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=277828&cod_primaria=1000120",
+    "date": "19-09-2026",
+    "verified_at": "2026-11-23T22:35:33+00:00"
+  },
+  "269121": {
+    "validated": true,
+    "yellow_cards_count": 2,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=269121&cod_primaria=1000120",
+    "date": "19-09-2026",
+    "verified_at": "2026-11-23T22:35:33+00:00"
+  },
+  "266408": {
+    "validated": true,
+    "yellow_cards_count": 14,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=266408&cod_primaria=1000120",
+    "date": "19-09-2026",
+    "verified_at": "2026-11-23T22:35:34+00:00"
+  },
+  "279335": {
+    "validated": true,
+    "yellow_cards_count": 7,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=279335&cod_primaria=1000120",
+    "date": "19-09-2026",
+    "verified_at": "2026-11-23T22:35:34+00:00"
+  },
+  "266406": {
+    "validated": true,
+    "yellow_cards_count": 5,
+    "red_cards_count": 1,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=266406&cod_primaria=1000120",
+    "date": "19-09-2026",
+    "verified_at": "2026-11-23T22:35:35+00:00"
+  },
+  "268640": {
+    "validated": true,
+    "yellow_cards_count": 4,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=268640&cod_primaria=1000120",
+    "date": "19-09-2026",
+    "verified_at": "2026-11-23T22:35:36+00:00"
+  },
+  "282881": {
+    "validated": true,
+    "yellow_cards_count": 2,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=282881&cod_primaria=1000120",
+    "date": "19-09-2026",
+    "verified_at": "2026-11-23T22:35:36+00:00"
+  },
+  "278493": {
+    "validated": true,
+    "yellow_cards_count": 8,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=278493&cod_primaria=1000120",
+    "date": "19-09-2026",
+    "verified_at": "2026-11-23T22:35:37+00:00"
+  },
+  "280960": {
+    "validated": true,
+    "yellow_cards_count": 1,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=280960&cod_primaria=1000120",
+    "date": "19-09-2026",
+    "verified_at": "2026-11-23T22:35:37+00:00"
   }
 }
