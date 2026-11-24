@@ -1,8 +1,8 @@
 {
-  "state": "ok",
-  "checked_at": "2026-11-24T06:27:13+00:00",
+  "state": "error",
+  "checked_at": "2026-11-24T07:55:41+00:00",
   "interval_minutes": 30,
-  "error": null,
+  "error": "El enlace de descarga del documento 1059902 no devolvió un PDF.",
   "updated_at": "2026-11-19T19:34:55+00:00",
   "page_count": 68,
   "game_count": 632,
