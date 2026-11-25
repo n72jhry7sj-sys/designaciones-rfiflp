@@ -5476,5 +5476,59 @@
     "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=289411&cod_primaria=1000120",
     "date": "11-11-2026",
     "verified_at": "2026-11-25T00:34:31+00:00"
+  },
+  "292574": {
+    "validated": true,
+    "yellow_cards_count": 3,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=292574&cod_primaria=1000120",
+    "date": "10-11-2026",
+    "verified_at": "2026-11-25T02:05:39+00:00"
+  },
+  "292128": {
+    "validated": true,
+    "yellow_cards_count": 3,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=292128&cod_primaria=1000120",
+    "date": "10-11-2026",
+    "verified_at": "2026-11-25T02:05:40+00:00"
+  },
+  "292579": {
+    "validated": true,
+    "yellow_cards_count": 2,
+    "red_cards_count": 1,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=292579&cod_primaria=1000120",
+    "date": "10-11-2026",
+    "verified_at": "2026-11-25T02:05:40+00:00"
+  },
+  "263551": {
+    "validated": true,
+    "yellow_cards_count": 3,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=263551&cod_primaria=1000120",
+    "date": "10-11-2026",
+    "verified_at": "2026-11-25T02:05:42+00:00"
+  },
+  "282656": {
+    "validated": true,
+    "yellow_cards_count": 1,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=282656&cod_primaria=1000120",
+    "date": "10-11-2026",
+    "verified_at": "2026-11-25T02:05:45+00:00"
+  },
+  "277871": {
+    "validated": true,
+    "yellow_cards_count": 2,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=277871&cod_primaria=1000120",
+    "date": "10-11-2026",
+    "verified_at": "2026-11-25T02:05:45+00:00"
   }
 }
