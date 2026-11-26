@@ -6970,5 +6970,14 @@
     "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=281857&cod_primaria=1000120",
     "date": "23-10-2026",
     "verified_at": "2026-11-26T18:36:52+00:00"
+  },
+  "287802": {
+    "validated": true,
+    "yellow_cards_count": 0,
+    "red_cards_count": 1,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=287802&cod_primaria=1000120",
+    "date": "23-10-2026",
+    "verified_at": "2026-11-26T19:49:53+00:00"
   }
 }
