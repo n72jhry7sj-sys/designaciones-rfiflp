@@ -1,31 +1,36 @@
 {
-  "cursor": 2611,
+  "cursor": 2651,
   "total_unique_games": 4309,
-  "checked_this_run": 39,
-  "verified_this_run": 2,
-  "network_errors": 12,
-  "verified_total": 838,
-  "last_checked_at": "2026-11-27T09:28:44+00:00",
+  "checked_this_run": 31,
+  "verified_this_run": 5,
+  "network_errors": 0,
+  "verified_total": 843,
+  "last_checked_at": "2026-11-27T10:37:55+00:00",
   "samples": [
     {
-      "code": "289533",
-      "reason": "HTTPSConnectionPool(host='www.fiflp.com', port=443): Max retries exceeded with url: /pnfg/NPcd/NFG_CmpPartido?CodActa=289533&cod_primaria=10"
+      "code": "289278",
+      "reason": "Sin ficha completa o sección Tarjetas",
+      "card_icon_examples": []
     },
     {
-      "code": "288263",
-      "reason": "('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))"
+      "code": "289276",
+      "reason": "Sin ficha completa o sección Tarjetas",
+      "card_icon_examples": []
     },
     {
-      "code": "289291",
-      "reason": "HTTPSConnectionPool(host='www.fiflp.com', port=443): Max retries exceeded with url: /pnfg/NPcd/NFG_CmpPartido?CodActa=289291&cod_primaria=10"
+      "code": "281237",
+      "reason": "Sin ficha completa o sección Tarjetas",
+      "card_icon_examples": []
     },
     {
-      "code": "288279",
-      "reason": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))"
+      "code": "288203",
+      "reason": "Sin ficha completa o sección Tarjetas",
+      "card_icon_examples": []
     },
     {
-      "code": "288249",
-      "reason": "HTTPSConnectionPool(host='www.fiflp.com', port=443): Max retries exceeded with url: /pnfg/NPcd/NFG_CmpPartido?CodActa=288249&cod_primaria=10"
+      "code": "288503",
+      "reason": "Sin ficha completa o sección Tarjetas",
+      "card_icon_examples": []
     }
   ],
   "image_diagnostics": []
