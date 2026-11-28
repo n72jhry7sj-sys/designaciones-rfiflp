@@ -8203,5 +8203,23 @@
     "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=288306&cod_primaria=1000120",
     "date": "10-10-2026",
     "verified_at": "2026-11-28T00:36:59+00:00"
+  },
+  "287795": {
+    "validated": true,
+    "yellow_cards_count": 1,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=287795&cod_primaria=1000120",
+    "date": "10-10-2026",
+    "verified_at": "2026-11-28T02:02:11+00:00"
+  },
+  "269142": {
+    "validated": true,
+    "yellow_cards_count": 1,
+    "red_cards_count": 0,
+    "cards_validation": "Colores explícitos en atributos de imágenes",
+    "official_url": "https://www.fiflp.com/pnfg/NPcd/NFG_CmpPartido?CodActa=269142&cod_primaria=1000120",
+    "date": "09-10-2026",
+    "verified_at": "2026-11-28T02:02:16+00:00"
   }
 }
